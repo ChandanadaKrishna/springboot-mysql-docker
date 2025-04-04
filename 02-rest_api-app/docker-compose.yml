@@ -1,25 +1,31 @@
-version: "3"
+version: "3.8"
 services:
-  application:
+  application:  # Restapp listed first
     image: restapp
     ports:
-    - "8080:8080"
+      - "8080:8080"
     networks:
-    - springboot-db-net
+      - springboot-db-net
     depends_on:
-    - mysqldb
-    volumes:
-    - /data/rest-app
-  mysqldb:
-    image: mysql:8.3
+      mysqldb:
+        condition: service_healthy
+    restart: always
+
+  mysqldb:  # MySQL listed after
+    image: mysql:8.0.33
     networks:
-    - springboot-db-net
+      - springboot-db-net
     ports:
-    - "3306:3306"
-    volumes:
-    - /data/mysql
+      - "3306:3306"
     environment:
-    - MYSQL_ROOT_PASSWORD=root
-    - MYSQL_DATABASE=project
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=project
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
 networks:
   springboot-db-net:
