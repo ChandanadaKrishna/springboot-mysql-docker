@@ -1,0 +1,26 @@
+version: "3"
+services:
+  application:
+    image: kittu481/restapp
+    ports:
+    - "8080:8080"
+    networks:
+    - springboot-db-net
+    depends_on:
+    - mysqldb
+    volumes:
+    - /data/rest-app
+    restart: always
+  mysqldb:
+    image: mysql:8.3
+    networks:
+    - springboot-db-net
+    ports:
+    - "3306:3306"
+    volumes:
+    - /data/mysql
+    environment:
+    - MYSQL_ROOT_PASSWORD=root
+    - MYSQL_DATABASE=project
+networks:
+  springboot-db-net:
