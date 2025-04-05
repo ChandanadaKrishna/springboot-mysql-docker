@@ -3,7 +3,7 @@ spring:
   application:
     name: 02-rest_api-app
   datasource:
-    url: jdbc:mysql://localhost:3306/project
+    url: jdbc:mysql://mysqldb:3306/project?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: root
   jpa:
